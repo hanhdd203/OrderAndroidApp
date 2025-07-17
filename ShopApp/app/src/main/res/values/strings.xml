@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">ShopApp</string>
+
+    <string name="label_welcome">Chào mừng bạn đến với Android App</string>
+    <string name="label_login_now">Đăng nhập ngay</string>
+    <string name="label_phone_number">"Số Điện Thoại "</string>
+    <string name="label_password">Mật khẩu</string>
+    <string name="label_register">Chưa có tài khoản ? </string>
+    <string name="label_co_tai_khoan">Đã có tài khoản</string>
+    <string name="label_name">Họ và tên</string>
+    <string name="label_xin_chao">"Xin chào "</string>
+    <string name="label_danh_muc">Danh Mục</string>
+    <string name="label_food">Đồ ăn</string>
+    <string name="label_drink">Đồ uống</string>
+    <string name="label_goi_y">Gợi ý cho bạn</string>
+    <string name="label_number_food">"Số lượng: "</string>
+    <string name="label_vi_tri_ban">"Vị trí bàn: "</string>
+    <string name="label_tong_tien">Tổng tiền: 0 đ</string>
+    <string name="label_ngay">Theo ngày</string>
+    <string name="label_thang">Theo tháng</string>
+    <string name="label_chon_ngay">Chọn ngày</string>
+    <string name="label_doanh_thu">Doanh thu: 0 VNĐ</string>
+    <string name="label_don_hang">Có 0 đơn hàng</string>
+    <string name="label_tong">"Tổng: "</string>
+    <string name="label_goi_mon">Gọi món</string>
+    <string name="label_lich_su_dat_mon">Lịch sử đặt món</string>
+    <string name="label_register_now">Đăng ký ngay</string>
+    <string name="label_gio_hang">Giỏ hàng của bạn</string>
+    <string name="label_tom_tat">Tóm tắt đơn hàng</string>
+    <string name="label_chon_ban">Chọn bàn:</string>
+
+
+    <string name="hint_phone">Hãy nhập số điện thoại</string>
+    <string name="hint_password">Hãy nhập mật khẩu</string>
+    <string name="hint_name">Hãy nhập họ tên</string>
+    <string name="hint_tim_kiem">Nhập món ăn muốn tìm ở đây</string>
+    <string name="hint_ten_mon">Tên món ăn</string>
+    <string name="hint_gia_mon_an">Giá món ăn</string>
+
+    <string name="link_register"> Đăng ký</string>
+    <string name="link_login">Đăng nhập</string>
+
+
+    <string name="button_login">Đăng nhập</string>
+    <string name="button_register">Đăng ký</string>
+    <string name="button_search">Tìm kiếm</string>
+    <string name="button_chon">Chọn</string>
+    <string name="button_order">Đặt ngay</string>
+    <string name="button_xac_nhan">Xác nhận</string>
+    <string name="button_chon_anh">Chọn ảnh</string>
+    <string name="button_them_mon">Thêm món</string>
+    <string name="button_luu">Lưu</string>
+    <string name="button_sua">Sửa món ăn</string>
+    <string name="button_don_ban">Dọn bàn</string>
+
+
+    <string name="menu_home">Trang chủ</string>
+    <string name="menu_logout">Đăng xuất</string>
+    <string name="menu_card">Giỏ hàng</string>
+    <string name="menu_da_goi">Lịch sử đặt món</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="check_box_dang_ban">Đang bán</string>
+    <string name="menu_them_mon_an">Thêm món ăn</string>
+    <string name="menu_doanh_thu">Xem doanh thu</string>
+    <string name="menu_don_hang">Xem đơn hàng</string>
+    <string name="menu_don_ban">Dọn bàn</string>
+
+
+</resources>

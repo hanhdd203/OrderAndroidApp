@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:title="@string/menu_home" />
+    <item
+        android:id="@+id/add_food"
+        android:title="@string/menu_them_mon_an" />
+    <item
+        android:id="@+id/order_history"
+        android:title="@string/menu_doanh_thu" />
+    <item
+        android:id="@+id/view_order_history"
+        android:title="@string/menu_don_hang" />
+    <item
+        android:id="@+id/clearTable"
+        android:title="@string/menu_don_ban" />
+    <item
+        android:id="@+id/menu_logout"
+        android:title="@string/menu_logout" />
+</menu>

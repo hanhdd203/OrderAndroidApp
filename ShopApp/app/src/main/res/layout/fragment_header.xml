@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/headerLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/welcomeAppTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:text="@string/label_xin_chao"
+        android:textSize="20sp" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/login"
+        app:shapeAppearanceOverlay="@style/CircleImageView" />
+</LinearLayout>
