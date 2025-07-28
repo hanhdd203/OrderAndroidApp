@@ -23,4 +23,5 @@ public class Food {
     @Column(name = "status", length = 50, columnDefinition = "nvarchar(255)")
     private boolean status;
     private String imageUrl;
+    private String category;
 }

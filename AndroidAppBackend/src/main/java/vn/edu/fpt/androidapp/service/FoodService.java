@@ -37,6 +37,7 @@ public class FoodService {
             foodToUpdate.setPrice(food.getPrice());
             foodToUpdate.setStatus(food.isStatus());
             foodToUpdate.setImageUrl(food.getImageUrl());
+            foodToUpdate.setCategory(food.getCategory());
             return foodRepository.save(foodToUpdate);
         }
         return null;

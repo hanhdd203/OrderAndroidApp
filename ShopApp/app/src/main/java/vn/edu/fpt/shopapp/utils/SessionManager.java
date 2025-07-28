@@ -14,7 +14,7 @@ public class SessionManager {
     private ImageView currentImageView;
     private Food currentEditingFood;
     private SessionManager(){
-
+        foodCart = new FoodCart();
     }
 
     public static SessionManager getInstance(){

@@ -27,6 +27,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown" />
+    <EditText
+        android:id="@+id/noteEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/hint_ghi_chu"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:gravity="top|start" />
 
 
     <TextView

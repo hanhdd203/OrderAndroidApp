@@ -1,7 +1,6 @@
 package vn.edu.fpt.androidapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,12 +26,15 @@ public class FoodOrder {
     @Column(name = "status", length = 50, columnDefinition = "nvarchar(255)")
     private String status;
 
+    @Column(name = "note", columnDefinition = "nvarchar(255) DEFAULT ''")
+    private String note;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
 //    @JsonIgnore
     private User user;
 
-    @OneToMany(mappedBy = "foodOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "foodOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 //    @JsonIgnore
     @JsonManagedReference
     private List<FoodOrderDetail> listFood;

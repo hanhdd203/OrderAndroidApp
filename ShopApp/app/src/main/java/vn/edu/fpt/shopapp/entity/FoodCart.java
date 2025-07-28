@@ -8,7 +8,10 @@ public class FoodCart {
     private User user;
     private HashMap<Food, Integer> foodList;
 
-    public FoodCart( User user, HashMap<Food, Integer> foodList) {
+    public FoodCart() {
+    }
+
+    public FoodCart(User user, HashMap<Food, Integer> foodList) {
         this.user = user;
         this.foodList = foodList;
     }

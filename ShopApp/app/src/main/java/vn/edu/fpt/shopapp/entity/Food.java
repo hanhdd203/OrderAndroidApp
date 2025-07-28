@@ -9,15 +9,18 @@ public class Food {
     private boolean status;
     private String imageUrl;
 
+    private String category;
+
     public Food() {
     }
 
-    public Food(int id, String name, double price, boolean status, String imageUrl) {
+    public Food(int id, String name, double price, boolean status, String imageUrl, String category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.status = status;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public String getName() {return name;}
@@ -39,6 +42,14 @@ public class Food {
     public int getId() {return id;}
 
     public void setId(int id) {this.id = id;}
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     @Override
     public boolean equals(Object obj) {

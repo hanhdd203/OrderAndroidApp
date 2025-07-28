@@ -51,5 +51,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false" />
+    <TextView
+        android:id="@+id/noteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ghi chú: "
+        android:textStyle="italic"
+        android:textColor="#666666"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>

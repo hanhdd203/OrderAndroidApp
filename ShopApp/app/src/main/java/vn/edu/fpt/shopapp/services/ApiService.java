@@ -44,7 +44,8 @@ public interface ApiService {
     @POST("api/order-details/{id}")
     Call<Void> updateStatus(@Path("id") int id);
 
-
+    @PUT("orders/{id}")
+    Call<Void> updateOrder(@Path("id")int orderId, @Body OrderRequestDTO orderRequestDTO);
 
     @Multipart
     @POST("foods/add")
@@ -52,7 +53,8 @@ public interface ApiService {
             @Part MultipartBody.Part image,
             @Part("name") RequestBody name,
             @Part("price") RequestBody price,
-            @Part("status") RequestBody status
+            @Part("status") RequestBody status,
+            @Part("category") RequestBody category
     );
 
 

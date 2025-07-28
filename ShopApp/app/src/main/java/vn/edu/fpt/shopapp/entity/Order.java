@@ -10,17 +10,19 @@ public class Order {
     private TableOrder tableOrder;
     private String status;
 
+    private String note;
     private List<OrderDetail> listFood;
 
     public Order() {}
 
-    public Order(int orderId, User user, String time, TableOrder tableOrder, String status, List<OrderDetail> listFood) {
+    public Order(int orderId, User user, String time, TableOrder tableOrder, String status,String note, List<OrderDetail> listFood) {
         this.orderId = orderId;
         this.user = user;
         this.time = time;
         this.tableOrder = tableOrder;
         this.status = status;
         this.listFood = listFood;
+        this.note = note;
     }
 
     public User getUser() {
@@ -35,6 +37,13 @@ public class Order {
 
     public void setOrderId(int orderId) {this.orderId = orderId;}
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 
     public String getTime() {return time;}
 

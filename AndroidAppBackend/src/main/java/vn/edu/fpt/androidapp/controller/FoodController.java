@@ -47,7 +47,8 @@ public class FoodController {
             @RequestParam("image") MultipartFile image,
             @RequestParam("name") String name,
             @RequestParam("price") double price,
-            @RequestParam("status") boolean status
+            @RequestParam("status") boolean status,
+            @RequestParam("category") String category
     ) {
         try {
             // Đường dẫn thư mục static/images
@@ -69,7 +70,8 @@ public class FoodController {
             food.setName(name);
             food.setPrice(price);
             food.setStatus(status);
-            food.setImageUrl(imageUrl); // Gán đường dẫn ảnh (cũ hoặc mới)
+            food.setImageUrl(imageUrl);
+            food.setCategory(category);
 
             foodService.saveFood(food);
 

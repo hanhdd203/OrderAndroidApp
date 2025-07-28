@@ -16,5 +16,6 @@ public class OrderRequestDTO {
     private int userId;
     private TableOrder tableOrder;
     private String status;
+    private String note;
     private List<FoodOrderDetailDTO> listFood;
 }

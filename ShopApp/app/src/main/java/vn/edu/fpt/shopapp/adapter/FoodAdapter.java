@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,11 +36,15 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import vn.edu.fpt.shopapp.OrderHistoryActivity;
 import vn.edu.fpt.shopapp.R;
 import vn.edu.fpt.shopapp.entity.Food;
+import vn.edu.fpt.shopapp.entity.Order;
+import vn.edu.fpt.shopapp.entity.OrderDetail;
 import vn.edu.fpt.shopapp.entity.TableOrder;
 import vn.edu.fpt.shopapp.entity.User;
 import vn.edu.fpt.shopapp.entity.dto.FoodOrderDetailDTO;
+import vn.edu.fpt.shopapp.entity.dto.MappingDto;
 import vn.edu.fpt.shopapp.entity.dto.OrderRequestDTO;
 import vn.edu.fpt.shopapp.services.ApiService;
 import vn.edu.fpt.shopapp.services.RetrofitClient;
@@ -49,14 +56,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     public static final int REQUEST_CODE_PICK_IMAGE = 1001;
 
     private Context context;
-    private List<Food> foodList;
+    private List<Food> foodList; // Danh sách các món ăn
 
-    // URI ảnh được chọn trong dialog edit
-    private Uri editDialogImageUri = null;
+    private Uri editDialogImageUri = null;// URI ảnh được chọn khi sửa món
 
-    // Interface để truyền sự kiện chọn ảnh lên Activity
+    // Interface dùng để truyền sự kiện từ Adapter lên Activity (chọn ảnh)
     public interface OnImageSelectedListener {
-        void onRequestImagePick(int position);
+        void onRequestImagePick(int position);// Khi người dùng chọn ảnh
     }
 
     private OnImageSelectedListener imageSelectedListener;
@@ -65,12 +71,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         this.imageSelectedListener = listener;
     }
 
-
     public FoodAdapter(Context context, List<Food> foodList) {
         this.context = context;
         this.foodList = foodList;
     }
-
+    // ViewHolder đại diện cho 1 item món ăn trong RecyclerView
     public static class FoodViewHolder extends RecyclerView.ViewHolder {
         ImageView ivFoodImage;
         TextView tvFoodName, tvFoodPrice, tvFoodStatus;
@@ -78,6 +83,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
         public FoodViewHolder(View itemView) {
             super(itemView);
+            // Gán các View từ XML
             ivFoodImage = itemView.findViewById(R.id.foodImageView);
             tvFoodName = itemView.findViewById(R.id.foodNameTextView);
             tvFoodPrice = itemView.findViewById(R.id.foodPriceTextView);
@@ -88,6 +94,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         }
     }
 
+    // Tạo ViewHolder cho mỗi item
     @NonNull
     @Override
     public FoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -95,21 +102,22 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         return new FoodViewHolder(view);
     }
 
+    // Hiển thị dữ liệu món ăn lên ViewHolder
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         final int pos = position;
         Food food = foodList.get(pos);
+        // Set thông tin món ăn lên các TextView
         holder.tvFoodName.setText(food.getName());
         holder.tvFoodPrice.setText("Giá: " + food.getPrice() + " VNĐ");
         holder.tvFoodStatus.setText(food.isStatus() ? "Còn bán" : "Ngừng bán");
-
+        // Tuỳ vào quyền user, hiển thị nút khác nhau
         User user = SessionManager.getInstance().getCurrentUser();
         if (user.getRole().equalsIgnoreCase("user")) {
             holder.addToCartButton.setVisibility(food.isStatus() ? View.VISIBLE : View.GONE);
             holder.orderButton.setVisibility(food.isStatus() ? View.VISIBLE : View.GONE);
         } else {
             holder.editButton.setVisibility(View.VISIBLE);
-//            holder.deleteButton.setVisibility(View.VISIBLE);
         }
 
         // Load ảnh từ URL bằng Glide
@@ -141,14 +149,15 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     @Override
     public int getItemCount() {
-        return foodList.size();
+        return foodList.size(); // Số lượng item hiển thị
     }
 
     private void showEditFoodDialog(Context context, int position, Food food, Consumer<Food> onFoodUpdated) {
+        // Inflate layout sửa món ăn từ file XML
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_food, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
-
+        // Lấy các view từ layout
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
         EditText priceEditText = dialogView.findViewById(R.id.priceEditText);
         ImageView previewImage = dialogView.findViewById(R.id.previewImage);
@@ -156,11 +165,20 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         CheckBox chkStatus = dialogView.findViewById(R.id.availableCheckBox);
         Button saveButton = dialogView.findViewById(R.id.saveButton);
 
+        RadioGroup categoryRadioGroup = dialogView.findViewById(R.id.categoryRadioGroup);
+
         // Set dữ liệu cũ
         nameEditText.setText(food.getName());
         priceEditText.setText(String.valueOf(food.getPrice()));
         chkStatus.setChecked(food.isStatus());
 
+
+        if (food.getCategory().equalsIgnoreCase("food")) {
+            categoryRadioGroup.check(R.id.foodRadioButton);
+        } else if (food.getCategory().equalsIgnoreCase("drink")) {
+            categoryRadioGroup.check(R.id.drinkRadioButton);
+        }
+        // Hiển thị ảnh món cũ
         Glide.with(context)
                 .load(food.getImageUrl())
                 .placeholder(R.drawable.bun)
@@ -168,10 +186,10 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
         AlertDialog dialog = builder.create();
 
-        //  Lưu food đang được chỉnh sửa
+        // Lưu food hiện tại đang chỉnh sửa vào Session
         SessionManager.getInstance().setCurrentEditingFood(food);
         SessionManager.getInstance().setCurrentImageView(previewImage);
-
+        // Khi người dùng bấm chọn ảnh
         selectImageButton.setOnClickListener(v -> {
             if (imageSelectedListener != null) {
                 imageSelectedListener.onRequestImagePick(position);
@@ -179,12 +197,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
                 Toast.makeText(context, "Không thể chọn ảnh", Toast.LENGTH_SHORT).show();
             }
         });
-
+        // Khi bấm "Lưu"
         saveButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();
             String priceStr = priceEditText.getText().toString().trim();
             boolean status = chkStatus.isChecked();
-
+            // Kiểm tra dữ liệu nhập
             if (name.isEmpty() || priceStr.isEmpty()) {
                 Toast.makeText(context, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                 return;
@@ -197,20 +215,32 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
                 Toast.makeText(context, "Giá không hợp lệ", Toast.LENGTH_SHORT).show();
                 return;
             }
+            // Lấy loại món (food hoặc drink)
+            int selectedCategoryId = categoryRadioGroup.getCheckedRadioButtonId();
+            String category = "";
+            if (selectedCategoryId == R.id.foodRadioButton) {
+                category = "food";
+            } else if (selectedCategoryId == R.id.drinkRadioButton) {
+                category = "drink";
+            } else {
+                Toast.makeText(context, "Vui lòng chọn loại món", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            // Cập nhật đối tượng Food
             food.setName(name);
             food.setPrice(price);
             food.setStatus(status);
-
+            food.setCategory(category);
+            // Nếu người dùng đã chọn ảnh mới, cập nhật URL ảnh
             if (editDialogImageUri != null) {
                 food.setImageUrl(editDialogImageUri.toString());
             }
-
-            // Gọi API cập nhật
+            // Gọi API để lưu thông tin sửa món
             updateFoodApi(food, success -> {
                 if (success) {
                     Toast.makeText(context, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                    onFoodUpdated.accept(food);
+                    onFoodUpdated.accept(food); // Cập nhật lại UI
                     dialog.dismiss();
                 } else {
                     Toast.makeText(context, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
@@ -229,81 +259,43 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                callback.accept(response.isSuccessful());
+                callback.accept(response.isSuccessful()); // Thành công thì trả về true
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                callback.accept(false);
+                callback.accept(false);// Thất bại thì trả về false
             }
         });
     }
 
     private void showOrderDialog(Food food) {
+        // Inflate layout dialog đặt món
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_order, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
-
+        // Khai báo các View trong dialog
         Spinner spinnerTable = dialogView.findViewById(R.id.spinnerTable);
         EditText edtSoLuong = dialogView.findViewById(R.id.numberEditText);
+        EditText edtNote = dialogView.findViewById(R.id.noteEditText);
         TextView tvTongTien = dialogView.findViewById(R.id.moneySumTextView);
         Button btnXacNhan = dialogView.findViewById(R.id.confirmButton);
         AlertDialog dialog = builder.create();
+        int userId = SessionManager.getInstance().getCurrentUser().getId();
 
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
-        // Gọi API lấy danh sách bàn
-        apiService.getTableOrder().enqueue(new Callback<List<TableOrder>>() {
+        checkOrderByUserId(new OrderCallback() {
             @Override
-            public void onResponse(Call<List<TableOrder>> call, Response<List<TableOrder>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<TableOrder> tables = response.body();
-
-                    // Hiển thị danh sách bàn lên Spinner
-                    List<String> tableNames = new ArrayList<>();
-                    for (TableOrder table : tables) {
-                        tableNames.add(table.getNameTable());
-                    }
-
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, tableNames);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerTable.setAdapter(adapter);
-
-                    // Xử lý khi nhấn xác nhận đặt món
-                    btnXacNhan.setOnClickListener(v -> {
-                        String soLuongStr = edtSoLuong.getText().toString().trim();
-                        int selectedTableIndex = spinnerTable.getSelectedItemPosition();
-
-                        if (soLuongStr.isEmpty() || selectedTableIndex < 0) {
-                            Toast.makeText(context, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        int soLuong = Integer.parseInt(soLuongStr);
-                        double tongTien = soLuong * food.getPrice();
-                        TableOrder selectedTable = tables.get(selectedTableIndex);
-
-                        // Tạo OrderRequestDTO
-                        OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
-                        orderRequestDTO.setUserId(SessionManager.getInstance().getCurrentUser().getId());
-                        orderRequestDTO.setTableOrder(selectedTable);
-
-                        List<FoodOrderDetailDTO> listFood = new ArrayList<>();
-                        listFood.add(new FoodOrderDetailDTO(food.getId(), soLuong, "Đang xử lý"));
-                        orderRequestDTO.setListFood(listFood);
-
-                        // Cập nhật trạng thái bàn và gửi order
-                        handleTableAndOrder(apiService, selectedTable, orderRequestDTO, tongTien, food, dialog);
-                    });
-
+            public void onOrderFound(Order order) {
+                if (order != null) {
+                    // Xử lý đơn hàng
+                    updateOrder(apiService,edtSoLuong,edtNote,btnXacNhan,food,userId,dialog,order);
                 } else {
-                    Toast.makeText(context, "Lỗi server: " + response.code(), Toast.LENGTH_SHORT).show();
+                    // Không có đơn hàng "Đang xử lý"
+                    // Gọi API lấy danh sách bàn
+                    loadTablesAndSetupOrder(apiService, spinnerTable, edtSoLuong, edtNote, btnXacNhan, food, userId, dialog);
                 }
-            }
-
-            @Override
-            public void onFailure(Call<List<TableOrder>> call, Throwable t) {
-                Toast.makeText(context, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -327,10 +319,147 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         dialog.show();
     }
 
+    public interface OrderCallback {
+        void onOrderFound(Order order);
+    }
+
+    public void checkOrderByUserId(OrderCallback callback) {
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<List<Order>> call = apiService.getOrdersByUserId(SessionManager.getInstance().getCurrentUser().getId());
+
+        call.enqueue(new Callback<List<Order>>() {
+            @Override
+            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    for (Order o : response.body()) {
+                        if (o.getStatus().equalsIgnoreCase("Đang xử lý")) {
+                            callback.onOrderFound(o);
+                            return;
+                        }
+                    }
+                    callback.onOrderFound(null); // không có đơn hàng phù hợp
+                } else {
+                    callback.onOrderFound(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Order>> call, Throwable t) {
+                Log.e("Error", "No Order");
+                callback.onOrderFound(null);
+            }
+        });
+    }
+
+
+    private void updateOrder(ApiService apiService,
+                                         EditText edtSoLuong, EditText edtNote, Button btnXacNhan,
+                                         Food food, int userId, AlertDialog dialog, Order currentOrder) {
+
+        btnXacNhan.setOnClickListener(v -> {
+            String soLuongStr = edtSoLuong.getText().toString().trim();
+            String note = edtNote.getText().toString().trim();
+
+            int soLuong = Integer.parseInt(soLuongStr);
+            TableOrder selectedTable = currentOrder.getTableOrder();
+
+            OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
+            orderRequestDTO.setUserId(userId);
+            orderRequestDTO.setTableOrder(selectedTable);
+            orderRequestDTO.setNote(note);
+
+
+            List<FoodOrderDetailDTO> listFood = new ArrayList<>();
+            for(OrderDetail orderDetail : currentOrder.getListFood()){
+                listFood.add(MappingDto.orderDetailToDto(orderDetail));
+            }
+            listFood.add(new FoodOrderDetailDTO(food.getId(), soLuong, "Đang xử lý"));
+            orderRequestDTO.setListFood(listFood);
+            // gửi api update
+            Call<Void> call = apiService.updateOrder(currentOrder.getOrderId(), orderRequestDTO); // truyền orderId ở path + object ở body
+
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        Log.d("UPDATE_ORDER", "Cập nhật đơn hàng thành công");
+                        Toast.makeText(context,"Đã gọi thêm món thành công",Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    } else {
+                        Log.e("UPDATE_ORDER", "Lỗi cập nhật: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e("UPDATE_ORDER", "Gọi API thất bại: " + t.getMessage());
+                }
+            });
+
+        });
+    }
+
+
+    private void loadTablesAndSetupOrder(ApiService apiService, Spinner spinnerTable,
+                                         EditText edtSoLuong, EditText edtNote, Button btnXacNhan,
+                                         Food food, int userId, AlertDialog dialog) {
+        apiService.getTableOrder().enqueue(new Callback<List<TableOrder>>() {
+            @Override
+            public void onResponse(Call<List<TableOrder>> call, Response<List<TableOrder>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<TableOrder> tables = response.body();
+
+                    List<String> tableNames = new ArrayList<>();
+                    for (TableOrder table : tables) {
+                        tableNames.add(table.getNameTable());
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, tableNames);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerTable.setAdapter(adapter);
+
+                    btnXacNhan.setOnClickListener(v -> {
+                        String soLuongStr = edtSoLuong.getText().toString().trim();
+                        int selectedTableIndex = spinnerTable.getSelectedItemPosition();
+                        String note = edtNote.getText().toString().trim();
+                        if (soLuongStr.isEmpty() || selectedTableIndex < 0) {
+                            Toast.makeText(context, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        int soLuong = Integer.parseInt(soLuongStr);
+                        double tongTien = soLuong * food.getPrice();
+                        TableOrder selectedTable = tables.get(selectedTableIndex);
+
+                        OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
+                        orderRequestDTO.setUserId(userId);
+                        orderRequestDTO.setTableOrder(selectedTable);
+                        orderRequestDTO.setNote(note);
+                        List<FoodOrderDetailDTO> listFood = new ArrayList<>();
+                        listFood.add(new FoodOrderDetailDTO(food.getId(), soLuong, "Đang xử lý"));
+                        orderRequestDTO.setListFood(listFood);
+
+                        handleTableAndOrder(apiService, selectedTable, orderRequestDTO, tongTien, food, dialog);
+                    });
+
+                } else {
+                    Toast.makeText(context, "Lỗi server: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TableOrder>> call, Throwable t) {
+                Toast.makeText(context, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
     private void handleTableAndOrder(ApiService apiService, TableOrder selectedTable, OrderRequestDTO orderRequestDTO,
                                      double tongTien, Food food, AlertDialog dialog) {
-
-        selectedTable.setStatus(false); // cập nhật trạng thái
+        // 1. Cập nhật trạng thái bàn thành "đang sử dụng" (false = đang có người)
+        selectedTable.setStatus(false);
 
         // Gửi yêu cầu cập nhật trạng thái bàn
         apiService.updateTableStatus(selectedTable).enqueue(new Callback<ResponseBody>() {
@@ -352,11 +481,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
+                    // Hiển thị thông báo cho người dùng
                     Toast.makeText(context,
                             "Đã đặt " + orderRequestDTO.getListFood().get(0).getQuantity() + " x " + food.getName() +
                                     " tại " + selectedTable.getNameTable() + ". Tổng: " + tongTien + " VNĐ",
                             Toast.LENGTH_LONG).show();
-                    dialog.dismiss();
+                    dialog.dismiss();// Đóng dialog
                 } else {
                     Toast.makeText(context, "Lỗi khi gửi order: " + response.code(), Toast.LENGTH_SHORT).show();
                 }

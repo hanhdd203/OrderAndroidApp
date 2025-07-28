@@ -41,6 +41,28 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp" />
 
+    <RadioGroup
+        android:id="@+id/categoryRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <RadioButton
+            android:id="@+id/foodRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đồ ăn" />
+
+        <RadioButton
+            android:id="@+id/drinkRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thức uống"
+            android:layout_marginStart="24dp" />
+    </RadioGroup>
+
+
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"

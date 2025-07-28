@@ -8,16 +8,18 @@ public class OrderRequestDTO {
     private int userId;
     private TableOrder tableOrder;
     private String status;
+    private String note;
     private List<FoodOrderDetailDTO> listFood;
 
     public OrderRequestDTO() {
     }
 
-    public OrderRequestDTO(int userId, TableOrder tableOrder, String status, List<FoodOrderDetailDTO> listFood) {
+    public OrderRequestDTO(int userId, TableOrder tableOrder, String status,String note, List<FoodOrderDetailDTO> listFood) {
         this.userId = userId;
         this.tableOrder = tableOrder;
         this.status = status;
         this.listFood = listFood;
+        this.note = note;
     }
 
     public int getUserId() {
@@ -50,5 +52,13 @@ public class OrderRequestDTO {
 
     public void setListFood(List<FoodOrderDetailDTO> listFood) {
         this.listFood = listFood;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

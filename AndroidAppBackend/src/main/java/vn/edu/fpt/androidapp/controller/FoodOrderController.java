@@ -66,5 +66,10 @@ public class FoodOrderController {
         tableOrderRepository.save(tableOrderUpdated);
         return ResponseEntity.ok("Updated");
     }
+
+    @PutMapping("/{id}")
+    public void updateOrder(@PathVariable("id") int orderId,@RequestBody OrderRequestDTO request) {
+        foodOrderService.updateWholeOrder(orderId, request);
+    }
 }
 

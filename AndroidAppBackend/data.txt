@@ -1,49 +1,52 @@
+INSERT INTO users (name, phone, role, password)
+VALUES (N'Nguyễn Văn A', '0123456789', 'admin', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS'),
+       (N'Trần Thị B', '0912345678', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS'),
+       (N'Lê Văn C', '0923456789', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS'),
+       (N'Phạm Thị D', '0934567890', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS'),
+       (N'Võ Văn E', '0945678901', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS');
+--        (N'Đỗ Đức Hanh', '0387006149', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS');
+INSERT INTO foods (image_url, [name], price, [status], [category])
+VALUES ('http://10.0.2.2:8080/images/bo-xao.webp', N'Bò xào', 30000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/bun-bo.webp', N'Bún bò', 35000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/bun-cha.jpg', N'Bún chả', 35000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/com-hai-san.jpg', N'Cơm rang hải sản', 40000, 0, 'food'),
+       ('http://10.0.2.2:8080/images/com-rang.jpg', N'Cơm rang', 30000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/com-tron.jpg', N'Cơm trộn', 25000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/ga-luoc.jpg', N'Gà luộc', 30000, 0, 'food'),
+       ('http://10.0.2.2:8080/images/ga-ran.jpg', N'Gà rán', 30000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/tra_chanh.jpg', N'Trà chanh', 15000, 1, 'drink'),
+       ('http://10.0.2.2:8080/images/pho-bo.jpg', N'Phở bò', 35000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/ca_phe.png', N'Cà phê', 30000, 1, 'drink'),
+       ('http://10.0.2.2:8080/images/rau-muong.jpg', N'Rau muống luộc', 20000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/thit-rang.jpg', N'Thịt rang', 25000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/coca.jpg', N'Coca Cola', 30000, 1, 'drink'),
+       ('http://10.0.2.2:8080/images/chan-ga.webp', N'Chân gà', 30000, 1, 'food'),
+       ('http://10.0.2.2:8080/images/pepsi.webp', N'Pepsi', 30000, 1, 'drink'),
+       ('http://10.0.2.2:8080/images/tra_xanh.jpg', N'Trà xanh', 25000, 1, 'drink');
 
+INSERT INTO table_orders (name_table, status)
+VALUES (N'Bàn 1', 1),
+       (N'Bàn 2', 1),
+       (N'Bàn 3', 1),
+       (N'Bàn 4', 1),
+       (N'Bàn 5', 1),
+       (N'Bàn 6', 1),
+       (N'Bàn 7', 1),
+       (N'Bàn 8', 1);
 
-INSERT INTO users (name, phone, role, password) VALUES
-                                                    (N'Nguyễn Văn A', '0123456789', 'admin', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS'),
-                                                    (N'Trần Thị B', '0912345678', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS'),
-                                                    (N'Lê Văn C', '0923456789', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS'),
-                                                    (N'Phạm Thị D', '0934567890', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS'),
-                                                    (N'Võ Văn E', '0945678901', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS');
---                                                     (N'Đỗ Đức Hanh', '0387006149', 'user', '$2a$10$TFKmLrBpTdW0ZTh6dItX7OLzSEiYQLjgD6yHma5BBnqc/VxHKL1cS');
-INSERT INTO foods (image_url, [name], price, [status]) VALUES
-                                                           ('http://10.0.2.2:8080/images/bo-xao.webp', N'Bò xào', 30000, 1),
-                                                           ('http://10.0.2.2:8080/images/bun-bo.webp', N'Bún bò', 35000, 1),
-                                                           ('http://10.0.2.2:8080/images/bun-cha.jpg', N'Bún chả', 35000, 1),
-                                                           ('http://10.0.2.2:8080/images/com-hai-san.jpg', N'Cơm rang hải sản', 40000, 0),
-                                                           ('http://10.0.2.2:8080/images/com-rang.jpg', N'Cơm rang', 30000, 1),
-                                                           ('http://10.0.2.2:8080/images/com-tron.jpg', N'Cơm trộn', 25000, 1),
-                                                           ('http://10.0.2.2:8080/images/ga-luoc.jpg', N'Gà luộc', 30000, 0),
-                                                           ('http://10.0.2.2:8080/images/ga-ran.jpg', N'Gà rán', 30000, 1),
-                                                           ('http://10.0.2.2:8080/images/pho-bo.jpg', N'Phở bò', 35000, 1),
-                                                           ('http://10.0.2.2:8080/images/rau-muong.jpg', N'Rau muống luộc', 20000, 1),
-                                                           ('http://10.0.2.2:8080/images/thit-rang.jpg', N'Thịt rang', 25000, 1),
-                                                           ('http://10.0.2.2:8080/images/chan-ga.webp', N'Chân gà', 30000, 1);
-
-INSERT INTO table_orders (name_table,status) VALUES
-                                                 (N'Bàn 1',1),
-                                                 (N'Bàn 2',1),
-                                                 (N'Bàn 3',1),
-                                                 (N'Bàn 4',1),
-                                                 (N'Bàn 5',1),
-                                                 (N'Bàn 6',1),
-                                                 (N'Bàn 7',1),
-                                                 (N'Bàn 8',1);
-
-INSERT INTO orders ( [table_id] ,[status], [time], [user_id]) VALUES
-                                                                  ( 1, N'Hoàn thành', '2025-07-07 21:55:15.993333', 1),
-                                                                  ( 2, N'Hoàn thành', '2025-07-05 21:55:15.993333', 2),
-                                                                  ( 3, N'Hoàn thành', '2025-07-08 21:55:15.993333', 3),
-                                                                  ( 4, N'Hoàn thành', '2025-06-07 21:55:15.993333', 4),
-                                                                  ( 5, N'Hoàn thành', '2025-06-07 21:55:15.993333', 5),
-                                                                  ( 2, N'Hoàn thành', '2025-07-07 21:55:15.993333', 5);
-INSERT INTO food_order_details (number, [status], food_id, order_id) VALUES
-                                                                         ( 2, N'Đã giao', 1, 1),
-                                                                         ( 1, N'Đã giao', 2, 1),
-                                                                         ( 1, N'Đã giao', 3, 2),
-                                                                         ( 3, N'Đã giao', 4, 3),
-                                                                         ( 2, N'Đã giao', 5, 4),
-                                                                         ( 2, N'Đã giao', 5, 5),
-                                                                         ( 2, N'Đã giao', 1, 6);
+INSERT INTO orders ([table_id], [status], [time], [user_id])
+VALUES (1, N'Hoàn thành', '2025-07-07 21:55:15.993333', 1),
+       (2, N'Hoàn thành', '2025-07-05 21:55:15.993333', 2),
+       (3, N'Hoàn thành', '2025-07-08 21:55:15.993333', 3),
+       (4, N'Hoàn thành', '2025-06-07 21:55:15.993333', 4),
+       (5, N'Hoàn thành', '2025-06-07 21:55:15.993333', 5),
+       (2, N'Hoàn thành', '2025-07-07 21:55:15.993333', 5);
+INSERT INTO food_order_details (number, [status], food_id, order_id)
+VALUES (2, N'Đã giao', 1, 1),
+       (1, N'Đã giao', 2, 1),
+       (1, N'Đã giao', 3, 2),
+       (3, N'Đã giao', 4, 3),
+       (2, N'Đã giao', 5, 4),
+       (2, N'Đã giao', 5, 5),
+       (2, N'Đã giao', 1, 6);
 

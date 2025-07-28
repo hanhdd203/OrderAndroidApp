@@ -59,6 +59,7 @@ public class FoodOrderService {
         foodOrder.setUser(user);
         foodOrder.setTime(LocalDateTime.now());
         foodOrder.setTableOrder(request.getTableOrder());
+        foodOrder.setNote(request.getNote());
         foodOrder.setStatus("Đang xử lý");
 
         List<FoodOrderDetail> items = new ArrayList<>();
@@ -79,6 +80,40 @@ public class FoodOrderService {
         foodOrderRepository.save(foodOrder);
     }
 
+    public void updateWholeOrder(int orderId, OrderRequestDTO request) {
+        // 1. Lấy đơn hàng cần cập nhật
+        FoodOrder foodOrder = foodOrderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found: ID " + orderId));
+
+        // 2. Cập nhật các thông tin cơ bản
+        foodOrder.setNote(request.getNote());
+        foodOrder.setTableOrder(request.getTableOrder());
+        foodOrder.setTime(LocalDateTime.now()); // cập nhật lại thời gian
+
+        // 3. Xóa danh sách món cũ (nếu quan hệ là Cascade.ALL và orphanRemoval = true thì tự động xóa)
+        foodOrder.getListFood().clear();
+
+        // 4. Tạo danh sách món mới
+        List<FoodOrderDetail> newItems = new ArrayList<>();
+        for (FoodOrderDetailDTO itemDTO : request.getListFood()) {
+            Food food = foodRepo.findById(itemDTO.getFoodId())
+                    .orElseThrow(() -> new RuntimeException("Food not found: ID " + itemDTO.getFoodId()));
+
+            FoodOrderDetail item = new FoodOrderDetail();
+            item.setFood(food);
+            item.setNumber(itemDTO.getQuantity());
+            item.setFoodOrder(foodOrder);
+            item.setStatus("Đang chế biến");
+
+            newItems.add(item);
+        }
+
+        // 5. Gán lại danh sách mới
+        foodOrder.getListFood().addAll(newItems);
+
+        // 6. Lưu lại
+        foodOrderRepository.save(foodOrder);
+    }
 
 
 }
